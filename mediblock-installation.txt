@@ -1,0 +1,83 @@
+Author: Dicord ID: kaanc #9137
+
+Node için tavsiye edilen minimum özellikler:
+
+AWS m5.large , 2 CPU, 8 GIB RAM, General Purpose SSD 500 GIB. Amazonu örnek vermişler. Buna bakarak bir node konfigürasyonu ayarlayabiliriz.
+
+KURULUM ADIMLARI:
+
+1) Nodu güncelleyelim
+sudo apt update
+2) git i kuralım
+sudo apt install git wget build-essential -y
+3) GO yu yükleyelim
+wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.3.linux-amd64.tar.gz
+4) Aşağıdaki 4 satırı $HOME/.bashrc dosyasının sonuna ekleyelim. Ben WinSCP editörünü kullandım.
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export GO111MODULE=on
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin 
+
+5) Aşağıdaki komutu çalıştıralım
+. $HOME/.bashrc
+
+6) GO nun sürümüne bakıp kontrol edelim
+go version
+
+7) Panacea nın son sürümünü yüklemek için aşağıdaki komutları çalıştıralım
+
+sudo apt install git
+git clone https://github.com/medibloc/panacea-core
+cd panacea-core
+git checkout v1.3.3
+make clean && make build
+
+8) panacea-core/build altındaki dosyaları /usr/bin altına kopyalayalım
+sudo chmod 777 ~/bin
+sudo chmod 777 ~/panacea-core/build
+cp -r build/. /usr/bin/
+
+9) panacea nın sürümünü kontrol edelim
+ panacead version -- long
+
+10) Screen utility yoksa yükleyelim ve bir screen açalım screen -S ten sonra dilediğiniz screen adını verebilirsiniz
+apt install screen
+screen -S mainpage
+
+11)  "panacead init" komutunun sonuna istediğiniz bir ismi ekleyebilirsiniz 
+panacead init <your_custom_moniker>
+#Aşağıdaki komutun sonucunu bir yere kopyalayıp saklayın içinde nodeid niz yazıyor
+
+panacead init panaceamon  # örnek komut
+
+12) ~/.panacead/config/config.toml dosyasında timeout_commit = "5s" yi "1s" olarak değiştirelim.
+
+13) ~/.panacead/config/config.toml dosyasında da persistent peers değerini https://github.com/medibloc/panacea-networks#persistent-peers linkindeki değerle değiştirelim ve kaydedip çıkalım..
+
+14) ~/.panacead/config/app.toml da minimum_fees değerini "" olarak bırakalım (Testnet olması nedeniyle).
+
+15) ~/.panacead/config/genesis.json dosyasının içindekileri silelim ve yerine https://github.com/medibloc/panacea-networks linkindeki genesis.json dosyasının içindekileri kopyalayalım ve kaydedip çıkalım.
+
+16) Eğer yukarıdaki işlemleri winscp ile yaparken putty den düşmüşseniz yeniden giriş yaptıktan sonra screen inimize aşağıdaki komutla geri dönebiliriz.
+
+screen -rd
+
+17) Node u başlatmak için aşağıdaki komutu çalıştıralım
+panacead start
+
+18) node çalışırken Ctrl A+C ile yeni ekrana geçebilir noddun statüsünü aşağıdaki komutla görebiliriz
+panaceacli status
+
+19) Asagidaki komut ile walletkey uretin komutun sonucunu  ve sifrenizi bir yere kaydedelim. Sonucta address: karşısındaki değeri başvuru formuna yapıştıracağız.
+panaceacli keys add <cuzdan adiniz>   
+panaceacli keys add kaanc  #ornek komut
+
+20) Aşağıdaki komutu çalışrıp sonucu bir yere kaydedin.
+panaceacli keys show <cuzdanadiniz> --bech=val
+panaceacli keys show kaanc --bech=val #ornek komut
+
+En son olarak aşağıdaki linkteki formu doldurup 7 Mayıs'a kadar gönderiyoruz.
+
+https://docs.google.com/forms/d/e/1FAIpQLSewynWdeFqtzNo-sUzvRuqJN4OH94w6C6B89RuNOMu6Zumnlw/viewform
