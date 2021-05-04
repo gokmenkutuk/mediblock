@@ -35,7 +35,7 @@ git checkout v1.3.3
 make clean && make build
 
 8) panacea-core/build altındaki dosyaları /usr/bin altına kopyalayalım
-sudo chmod 777 ~/bin
+sudo chmod 777 /bin
 sudo chmod 777 ~/panacea-core/build
 cp -r build/. /usr/bin/
 
